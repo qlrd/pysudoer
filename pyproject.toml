@@ -27,8 +27,10 @@ lint.sequence = [
     { cmd = "pylint --rcfile .pylint/tests ./tests"}
 ]
 test.sequence = [
-    { cmd = "pytest ./tests"}
+    { cmd = "pytest --cache-clear --cov=src --cov-report html ./tests"}
 ]
+
+coverage= "pytest --cache-clear -cov=src --cov-report xml ./tests"
 
 [build-system]
 requires = ["poetry-core"]

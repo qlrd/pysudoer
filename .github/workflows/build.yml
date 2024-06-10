@@ -1,0 +1,127 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - kivy
+      
+  pull_request:
+
+jobs:
+  
+  black:
+
+    runs-on: ubuntu-latest
+    steps:
+      
+      - uses: actions/checkout@v4
+
+      - name: Install poetry
+        run: pipx install poetry
+        
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'poetry'
+          cache-dependency-path: './poetry.lock'
+      
+      - name: Install poetry dependencies
+        run: poetry install
+
+      - name: Check format/
+        run: poetry run poe format --check --verbose
+
+  pylint:
+
+    needs: black
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'poetry'
+          cache-dependency-path: './poetry.lock'
+
+      - name: Install poetry dependencies
+        run: poetry install
+        
+      - name: Lint src/
+        run: poetry run poe lint
+
+  pytest:
+
+    needs: pylint
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-12
+          - macos-13
+        
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'poetry'
+          cache-dependency-path: './poetry.lock'
+
+      - name: Install project and its dependencies
+        run: poetry install
+        
+      - name: Run tests
+        run: poetry run poe test
+          
+  coverage:
+
+    needs: pytest
+
+    runs-on: ubuntu-latest
+    
+    steps:
+     
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'poetry'
+          cache-dependency-path: './poetry.lock'
+
+      - name: Install project and its dependencies
+        run: poetry install
+
+      - name: Build coverage file
+        run: poetry run poe coverage
+      
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
