@@ -1,0 +1,33 @@
+# Compiled Sources
+###################
+*.tar.gz
+*.whl
+
+# Logs and Databases
+######################
+*.log
+
+# VIM Swap Files
+######################
+*.swp
+
+# Test failure outputs
+######################
+tests/results/*
+
+# Python cache files
+######################
+__pycache__/
+.pytest_cache
+*.pyc
+*.egg-info
+
+# MacOS desktop metadata files
+######################
+.DS_Store
+
+.vagrant
+
+# Test files
+############
+.coverage

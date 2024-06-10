@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "kivy-sudoer"
+version = "0.0.1"
+description = "Run a subprocess with administrative privileges, prompting the user with a graphical OS dialog if necessary."
+authors = ["qlrd <qlrddev@gmail.com>"]
+license = "LICENSE"
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.13"
+kivy = "2.3.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.1.1"
+pylint = "^3.0.3"
+pytest-cov = "^4.1.0"
+poethepoet = "^0.25.1"
+
+[tool.poe.tasks]
+format.sequence = [
+    { cmd = "black ./kivy_sudoer" },
+    { cmd = "black ./tests" }
+]
+lint.sequence = [
+    { cmd = "pylint --rcfile .pylint/kivy_sudoer ./kivy_sudoer" },
+    { cmd = "pylint --rcfile .pylint/tests ./tests"}
+]
+test.sequence = [
+    { cmd = "pytest ./tests"}
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
