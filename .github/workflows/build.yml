@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
     branches:
-      - main
+      - kivy
       
   pull_request:
 
@@ -28,8 +28,11 @@ jobs:
       - name: Install poetry dependencies
         run: poetry install
 
-      - name: Check format/
-        run: poetry run poe format --check --verbose
+      - name: Check format src
+        run: poetry run poe format-src --check --verbose
+
+      - name: Check format tests
+        run: poetry run poe format-tests --check --verbose
 
   pylint:
 

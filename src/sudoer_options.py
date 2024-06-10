@@ -1,6 +1,6 @@
 """sudoer_options.py"""
+
 import re
-import typing
 
 
 class SudoerOptions:
@@ -11,6 +11,7 @@ class SudoerOptions:
     * name: the name of the Sudoer object
     * icns: used for SudoerDarwin (macOS)
     """
+
     def __init__(self, name: str, icns: str):
         self.name = name
         self.icns = icns
@@ -37,7 +38,7 @@ class SudoerOptions:
     def icns(self, value: str = ""):
         """Setter for icns"""
         if value is None:
-            self._icns = ""  
+            self._icns = ""
         elif re.findall(r"^.*\.icns$", value):
             self._icns = value
         else:

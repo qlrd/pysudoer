@@ -1,6 +1,5 @@
 """sudoer.py"""
 
-import re
 import io
 import sys
 import tempfile
@@ -10,7 +9,7 @@ import typing
 
 from .sudoer_options import SudoerOptions
 
-EXEC_OPTIONS = { "env": None }
+EXEC_OPTIONS = {"env": None}
 
 
 class Sudoer:
@@ -21,23 +20,19 @@ class Sudoer:
 
     * Windows, uses elevate utility with native User Account Control
       (UAC) prompt (no PowerShell required)
-    
+
     * OS X, uses bundled applet (inspired by Joran Dirk Greef)
-    
+
     * Linux, uses system pkexec or gksudo (system or bundled).
 
     Refactored from https://www.npmjs.com/package/@o/electron-sudo
     """
-    
-    def __init__(
-        self,
-        name: str,
-        child_process: subprocess.Popen,
-        icns: str = None
-    ):
+
+    def __init__(self, name: str, child_process: subprocess.Popen, icns: str = None):
         self.options = SudoerOptions(name=name, icns=icns)
         self.platform = sys.platform
         self.tmp_dir = tempfile.mkdtemp()
+        self.child_process = child_process
 
     @property
     def options(self) -> SudoerOptions:
@@ -58,7 +53,7 @@ class Sudoer:
     def child_process(self, value: str):
         """Setter for child_process"""
         self._child_process = value
-    
+
     @property
     def platform(self) -> str:
         """Getter for platform"""
@@ -81,15 +76,18 @@ class Sudoer:
 
     def hash(self, buffer: io.BytesIO = io.BytesIO(b"")):
         """Create a hash for Sudoer object"""
-        h = hashlib.new('sha256')
+        h = hashlib.new("sha256")
         for s in ["kivy-sudo", self.options.name, buffer.getvalue().hex()]:
             h.update(s.encode())
         return h.hexdigest()[:-32]
 
     @staticmethod
-    def join_env(options: typing.Dict[str, str] = {}):
+    def join_env(options: typing.Dict[str, str]):
         """Return an array of `key=value` strings for a given dictionary"""
-        return [ f"{key}={val}" for key,val in options.items() ]
+        if options is None:
+            raise ValueError("Env options cannot be None")
+
+        return [f"{key}={val}" for key, val in options.items()]
 
     @staticmethod
     def escape_double_quotes(message: str = ""):
@@ -99,11 +97,11 @@ class Sudoer:
     @staticmethod
     def enclose_double_quotes(message: str = ""):
         """Enclose a message without double quotes"""
-        return message.replace(message, f"\"{message}\"")
+        return message.replace(message, f'"{message}"')
 
     @staticmethod
     def kill(pid: int):
-        """kill a process """
+        """kill a process"""
         if not pid:
             pass
         else:

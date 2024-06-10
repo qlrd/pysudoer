@@ -18,12 +18,11 @@ pytest-cov = "^4.1.0"
 poethepoet = "^0.25.1"
 
 [tool.poe.tasks]
-format.sequence = [
-    { cmd = "black ./kivy_sudoer" },
-    { cmd = "black ./tests" }
-]
+format-src = "black ./src"
+format-tests = "black ./tests"
+format = ["format-src", "format-tests"]
 lint.sequence = [
-    { cmd = "pylint --rcfile .pylint/kivy_sudoer ./kivy_sudoer" },
+    { cmd = "pylint --rcfile .pylint/src ./src" },
     { cmd = "pylint --rcfile .pylint/tests ./tests"}
 ]
 test.sequence = [
