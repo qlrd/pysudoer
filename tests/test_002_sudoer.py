@@ -6,61 +6,31 @@ from src.sudoer import Sudoer
 class TestSudoer(TestCase):
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer.subprocess.Popen")
-    def test_sudoer_linux(self, mock_popen):
-        process_mock = MagicMock()
-        attrs = {"communicate.return_value": ("output", "success")}
-        process_mock.configure_mock(**attrs)
-        mock_popen.return_value = process_mock
-
-        sudoer = Sudoer(name="mock", child_process=mock_popen)
-        mock_popen.communicate()
+    def test_sudoer_linux(self):
+        sudoer = Sudoer(name="mock")
         self.assertEqual(sudoer.options.name, "mock")
         self.assertEqual(sudoer.platform, "linux")
-        mock_popen.communicate.assert_called_once()
 
     @patch("sys.platform", "win32")
-    @patch("src.sudoer.subprocess.Popen")
-    def test_sudoer_windows(self, mock_popen):
-        process_mock = MagicMock()
-        attrs = {"communicate.return_value": ("output", "success")}
-        process_mock.configure_mock(**attrs)
-        mock_popen.return_value = process_mock
-
-        sudoer = Sudoer(name="mock", child_process=mock_popen)
-        mock_popen.communicate()
+    def test_sudoer_windows(self):
+        sudoer = Sudoer(name="mock")
         self.assertEqual(sudoer.options.name, "mock")
         self.assertEqual(sudoer.platform, "win32")
-        mock_popen.communicate.assert_called_once()
 
     @patch("sys.platform", "darwin")
-    @patch("src.sudoer.subprocess.Popen")
-    def test_sudoer_darwin(self, mock_popen):
-        process_mock = MagicMock()
-        attrs = {"communicate.return_value": ("output", "success")}
-        process_mock.configure_mock(**attrs)
-        mock_popen.return_value = process_mock
-
-        sudoer = Sudoer(name="mock", child_process=mock_popen)
-        mock_popen.communicate()
+    def test_sudoer_darwin(self):
+        sudoer = Sudoer(name="mock")
         self.assertEqual(sudoer.options.name, "mock")
         self.assertEqual(sudoer.platform, "darwin")
-        mock_popen.communicate.assert_called_once()
 
-    @patch("src.sudoer.subprocess.Popen")
     @patch("src.sudoer.io.BytesIO")
-    def test_hash(self, mock_io, mock_popen):
-        process_mock = MagicMock()
-        attrs = {"communicate.return_value": ("output", "success")}
-        process_mock.configure_mock(**attrs)
-        mock_popen.return_value = process_mock
-
+    def test_hash(self, mock_io):
         io_bytes_mock = MagicMock()
         attrs = {"getbuffer.return_value": {"nbytes": 0}, "getvalue.return_value": ""}
         io_bytes_mock.configure_mock(**attrs)
         mock_io.return_value = io_bytes_mock
 
-        sudoer = Sudoer(name="mock", child_process=mock_popen)
+        sudoer = Sudoer(name="mock")
         h = sudoer.hash()
         self.assertEqual(h, "32125346b1ddddcd768ef44c1d109dfa")
 

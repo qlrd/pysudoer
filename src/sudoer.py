@@ -3,7 +3,6 @@
 import io
 import sys
 import tempfile
-import subprocess
 import hashlib
 import typing
 
@@ -28,11 +27,10 @@ class Sudoer:
     Refactored from https://www.npmjs.com/package/@o/electron-sudo
     """
 
-    def __init__(self, name: str, child_process: subprocess.Popen, icns: str = None):
+    def __init__(self, name: str, icns: str = None):
         self.options = SudoerOptions(name=name, icns=icns)
         self.platform = sys.platform
         self.tmp_dir = tempfile.mkdtemp()
-        self.child_process = child_process
 
     @property
     def options(self) -> SudoerOptions:
@@ -43,16 +41,6 @@ class Sudoer:
     def options(self, value: str):
         """Setter for options"""
         self._options = value
-
-    @property
-    def child_process(self) -> subprocess.Popen:
-        """Getter for child_process"""
-        return self._child_process
-
-    @child_process.setter
-    def child_process(self, value: str):
-        """Setter for child_process"""
-        self._child_process = value
 
     @property
     def platform(self) -> str:
