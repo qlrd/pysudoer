@@ -21,7 +21,13 @@ class SudoerUnix(Sudoer):
     def __init__(self, name: str, icns: str):
         super().__init__(name=name if not name is None else "kivy", icns=icns)
 
-    def copy(self, source: str, target: str, callback: typing.Callable):
+    def copy(
+        self,
+        source: str,
+        target: str,
+        env: typing.Dict[str, str],
+        callback: typing.Callable,
+    ):
         """Do a /bin/cp -R -p <source> <target>"""
         norm_source = os.path.normpath(source)
         norm_target = os.path.normpath(target)
@@ -32,10 +38,13 @@ class SudoerUnix(Sudoer):
         # pylint: disable=consider-using-with
         SudoerUnix.run_cmd(
             ["/bin/cp", "-R", "-p", f'"{escaped_source}"', f'"{escaped_target}"'],
+            env=env,
             callback=callback,
         )
 
-    def remove(self, target: str, callback: typing.Callable):
+    def remove(
+        self, target: str, env: typing.Dict[str, str], callback: typing.Callable
+    ):
         """Do a /bin/rm -rf <target>"""
         print(target in self.tmp_dir)
         if not target.startswith(self.tmp_dir):
@@ -44,10 +53,12 @@ class SudoerUnix(Sudoer):
         norm_target = os.path.normpath(target)
         escaped_target = Sudoer.escape_double_quotes(norm_target)
 
-        SudoerUnix.run_cmd(["/bin/rm", "-rf", f'"{escaped_target}"'], callback=callback)
+        SudoerUnix.run_cmd(
+            ["/bin/rm", "-rf", f'"{escaped_target}"'], env=env, callback=callback
+        )
 
-    def reset(self, callback: typing.Callable):
+    def reset(self, env: typing.Dict[str, str], callback: typing.Callable):
         """Do a /usr/bin/sudo -k"""
 
         # pylint: disable=consider-using-with
-        SudoerUnix.run_cmd(["/usr/bin/sudo", "-k"], callback=callback)
+        SudoerUnix.run_cmd(["/usr/bin/sudo", "-k"], env=env, callback=callback)

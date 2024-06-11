@@ -16,9 +16,10 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_linux", icns=None)
-        sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", callback=callback)
+        sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
         mock_popen.assert_called_once_with(
             ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
+            env={},
             stdout=-1,
             stderr=-1,
         )
@@ -37,11 +38,12 @@ class TestSudoerLinux(TestCase):
         sudoer = SudoerUnix(name="mock_linux", icns=None)
 
         with self.assertRaises(RuntimeError) as exc_info:
-            sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", callback=callback)
+            sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
 
         self.assertEqual(str(exc_info.exception), "error")
         mock_popen.assert_called_once_with(
             ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
+            env={},
             stdout=-1,
             stderr=-1,
         )
@@ -58,9 +60,9 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_linux", icns=None)
-        sudoer.remove("/tmp/mock.txt", callback=callback)
+        sudoer.remove("/tmp/mock.txt", env={}, callback=callback)
         mock_popen.assert_called_once_with(
-            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], stdout=-1, stderr=-1
+            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], env={}, stdout=-1, stderr=-1
         )
         callback.assert_called_once_with("success")
 
@@ -71,7 +73,7 @@ class TestSudoerLinux(TestCase):
 
         with self.assertRaises(ValueError) as exc_info:
             sudoer = SudoerUnix(name="mock_linux", icns=None)
-            sudoer.remove("/usr/mock.txt", callback=callback)
+            sudoer.remove("/usr/mock.txt", env={}, callback=callback)
 
         self.assertEqual(
             str(exc_info.exception), "Try to remove suspicious target: /usr/mock.txt"
@@ -91,11 +93,11 @@ class TestSudoerLinux(TestCase):
         sudoer = SudoerUnix(name="mock_linux", icns=None)
 
         with self.assertRaises(RuntimeError) as exc_info:
-            sudoer.remove("/tmp/mock.txt", callback=callback)
+            sudoer.remove("/tmp/mock.txt", env={}, callback=callback)
 
         self.assertEqual(str(exc_info.exception), "error")
         mock_popen.assert_called_once_with(
-            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], stdout=-1, stderr=-1
+            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "linux")
@@ -109,9 +111,9 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_linux", icns=None)
-        sudoer.reset(callback=callback)
+        sudoer.reset(env={}, callback=callback)
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], stdout=-1, stderr=-1
+            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "darwin")
@@ -125,9 +127,10 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-        sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", callback=callback)
+        sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
         mock_popen.assert_called_once_with(
             ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
+            env={},
             stdout=-1,
             stderr=-1,
         )
@@ -146,11 +149,12 @@ class TestSudoerLinux(TestCase):
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
 
         with self.assertRaises(RuntimeError) as exc_info:
-            sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", callback=callback)
+            sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
 
         self.assertEqual(str(exc_info.exception), "error")
         mock_popen.assert_called_once_with(
             ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
+            env={},
             stdout=-1,
             stderr=-1,
         )
@@ -167,9 +171,9 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-        sudoer.remove("/tmp/mock.txt", callback=callback)
+        sudoer.remove("/tmp/mock.txt", env={}, callback=callback)
         mock_popen.assert_called_once_with(
-            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], stdout=-1, stderr=-1
+            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], env={}, stdout=-1, stderr=-1
         )
         callback.assert_called_once_with("success")
 
@@ -180,7 +184,7 @@ class TestSudoerLinux(TestCase):
 
         with self.assertRaises(ValueError) as exc_info:
             sudoer = SudoerUnix(name="mock_darwin", icns=None)
-            sudoer.remove("/usr/mock.txt", callback=callback)
+            sudoer.remove("/usr/mock.txt", env={}, callback=callback)
 
         self.assertEqual(
             str(exc_info.exception), "Try to remove suspicious target: /usr/mock.txt"
@@ -200,11 +204,11 @@ class TestSudoerLinux(TestCase):
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
 
         with self.assertRaises(RuntimeError) as exc_info:
-            sudoer.remove("/tmp/mock.txt", callback=callback)
+            sudoer.remove("/tmp/mock.txt", env={}, callback=callback)
 
         self.assertEqual(str(exc_info.exception), "error")
         mock_popen.assert_called_once_with(
-            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], stdout=-1, stderr=-1
+            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "darwin")
@@ -218,7 +222,7 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-        sudoer.reset(callback=callback)
+        sudoer.reset(callback=callback, env={})
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], stdout=-1, stderr=-1
+            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
         )

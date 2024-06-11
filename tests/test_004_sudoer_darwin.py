@@ -73,7 +73,7 @@ class TestSudoerDarwin(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerDarwin(name="mock_darwin", icns="mock.icns")
-        sudoer.exec("echo 'mock'", callback=callback)
+        sudoer.exec("echo 'mock'", env={}, callback=callback)
         mock_popen.assert_called_once_with(
             [
                 "osascript -e",
@@ -81,6 +81,7 @@ class TestSudoerDarwin(TestCase):
                 'with prompt \\"mock_darwin\\"',
                 "with administrator privileges",
             ],
+            env={},
             stdout=-1,
             stderr=-1,
         )

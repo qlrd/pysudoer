@@ -97,11 +97,14 @@ class Sudoer:
             pass
 
     @staticmethod
-    def run_cmd(cmd: typing.List[str], callback: typing.Callable):
+    def run_cmd(
+        cmd: typing.List[str], env: typing.Dict[str, str], callback: typing.Callable
+    ):
         """Run some child process"""
         # pylint: disable=consider-using-with
         result = subprocess.Popen(
             cmd,
+            env=env,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )

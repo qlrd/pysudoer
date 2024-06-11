@@ -44,8 +44,8 @@ class SudoerDarwin(SudoerUnix):
             "with administrator privileges",
         ]
 
-    def exec(self, cmd: str, callback: typing.Callable):
+    def exec(self, cmd: str, env: typing.Callable, callback: typing.Callable):
         """Run a command for AppleScript"""
         cmd_escaped = re.sub(r"\"", r'\\\\\\"', cmd)
         to_exec = self.get_command(cmd_escaped)
-        SudoerDarwin.run_cmd(to_exec, callback)
+        SudoerDarwin.run_cmd(to_exec, env=env, callback=callback)
