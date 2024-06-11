@@ -1,7 +1,5 @@
 """sudoer_options.py"""
 
-import re
-
 
 class SudoerOptions:
     """
@@ -37,9 +35,4 @@ class SudoerOptions:
     @icns.setter
     def icns(self, value: str = ""):
         """Setter for icns"""
-        if value is None:
-            self._icns = ""
-        elif re.findall(r"^.*\.icns$", value):
-            self._icns = value
-        else:
-            raise ValueError(f"Invalid icns: {value}")
+        self._icns = value

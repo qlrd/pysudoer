@@ -5,6 +5,7 @@ import sys
 import tempfile
 import hashlib
 import typing
+import subprocess
 
 from .sudoer_options import SudoerOptions
 
@@ -94,3 +95,18 @@ class Sudoer:
             pass
         else:
             pass
+
+    @staticmethod
+    def run_cmd(cmd: typing.List[str], callback: typing.Callable):
+        """Run some child process"""
+        # pylint: disable=consider-using-with
+        result = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        output, error = result.communicate()
+        if error:
+            raise RuntimeError(error.decode())
+        callback(output.decode())

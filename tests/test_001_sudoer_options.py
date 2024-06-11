@@ -17,9 +17,3 @@ class TestSudoerOptions(TestCase):
             SudoerOptions(name=None, icns=None)
 
         self.assertEqual(str(exc_info.exception), "Name cannot be None")
-
-    def test_fail_icns(self):
-        with self.assertRaises(ValueError) as exc_info:
-            SudoerOptions(name="mock", icns="mock.txt")
-
-        self.assertEqual(str(exc_info.exception), "Invalid icns: mock.txt")

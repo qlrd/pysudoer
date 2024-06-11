@@ -2,7 +2,6 @@
 
 import os
 import typing
-import subprocess
 from src.sudoer import Sudoer
 
 
@@ -31,17 +30,10 @@ class SudoerUnix(Sudoer):
         escaped_target = Sudoer.escape_double_quotes(norm_target)
 
         # pylint: disable=consider-using-with
-        result = subprocess.Popen(
+        SudoerUnix.run_cmd(
             ["/bin/cp", "-R", "-p", f'"{escaped_source}"', f'"{escaped_target}"'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            callback=callback,
         )
-
-        output, error = result.communicate()
-        if error:
-            raise RuntimeError(error.decode())
-
-        callback(output.decode())
 
     def remove(self, target: str, callback: typing.Callable):
         """Do a /bin/rm -rf <target>"""
@@ -52,32 +44,10 @@ class SudoerUnix(Sudoer):
         norm_target = os.path.normpath(target)
         escaped_target = Sudoer.escape_double_quotes(norm_target)
 
-        # pylint: disable=consider-using-with
-        result = subprocess.Popen(
-            ["/bin/rm", "-rf", f'"{escaped_target}"'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-
-        output, error = result.communicate()
-        if error:
-            raise RuntimeError(error.decode())
-        callback(output.decode())
+        SudoerUnix.run_cmd(["/bin/rm", "-rf", f'"{escaped_target}"'], callback=callback)
 
     def reset(self, callback: typing.Callable):
         """Do a /usr/bin/sudo -k"""
 
         # pylint: disable=consider-using-with
-        result = subprocess.Popen(
-            [
-                "/usr/bin/sudo",
-                "-k",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-
-        output, error = result.communicate()
-        if error:
-            raise RuntimeError(error.decode())
-        callback(output.decode())
+        SudoerUnix.run_cmd(["/usr/bin/sudo", "-k"], callback=callback)
