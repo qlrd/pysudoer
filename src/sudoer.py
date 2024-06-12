@@ -110,6 +110,8 @@ class Sudoer:
         )
 
         output, error = result.communicate()
+        print(output)
+        print(error)
         if error:
             raise RuntimeError(error.decode())
         callback(output.decode())
