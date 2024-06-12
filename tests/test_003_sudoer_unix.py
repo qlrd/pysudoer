@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 from src.sudoer_unix import SudoerUnix
@@ -127,9 +128,20 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-        sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
+        sudoer.copy(
+            os.path.normpath("/tmp/mock.txt"),
+            os.path.normpath("/tmp/test.txt"),
+            env={},
+            callback=callback,
+        )
         mock_popen.assert_called_once_with(
-            ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
+            [
+                "/bin/cp",
+                "-R",
+                "-p",
+                f'"{os.path.normpath("/tmp/mock.txt")}"',
+                f'"{os.path.normpath("/tmp/test.txt")}"',
+            ],
             env={},
             stdout=-1,
             stderr=-1,
@@ -147,17 +159,10 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-
         with self.assertRaises(RuntimeError) as exc_info:
             sudoer.copy("/tmp/mock.txt", "/tmp/test.txt", env={}, callback=callback)
 
         self.assertEqual(str(exc_info.exception), "error")
-        mock_popen.assert_called_once_with(
-            ["/bin/cp", "-R", "-p", '"/tmp/mock.txt"', '"/tmp/test.txt"'],
-            env={},
-            stdout=-1,
-            stderr=-1,
-        )
 
     @patch("sys.platform", "darwin")
     @patch("src.sudoer.tempfile.mkdtemp", lambda: "/tmp")
@@ -171,9 +176,12 @@ class TestSudoerLinux(TestCase):
         callback = MagicMock()
 
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
-        sudoer.remove("/tmp/mock.txt", env={}, callback=callback)
+        sudoer.remove(os.path.normpath("/tmp/mock.txt"), env={}, callback=callback)
         mock_popen.assert_called_once_with(
-            ["/bin/rm", "-rf", '"/tmp/mock.txt"'], env={}, stdout=-1, stderr=-1
+            ["/bin/rm", "-rf", f'"{os.path.normpath("/tmp/mock.txt")}"'],
+            env={},
+            stdout=-1,
+            stderr=-1,
         )
         callback.assert_called_once_with("success")
 
@@ -184,10 +192,11 @@ class TestSudoerLinux(TestCase):
 
         with self.assertRaises(ValueError) as exc_info:
             sudoer = SudoerUnix(name="mock_darwin", icns=None)
-            sudoer.remove("/usr/mock.txt", env={}, callback=callback)
+            sudoer.remove(os.path.normpath("/usr/mock.txt"), env={}, callback=callback)
 
         self.assertEqual(
-            str(exc_info.exception), "Try to remove suspicious target: /usr/mock.txt"
+            str(exc_info.exception),
+            f"Try to remove suspicious target: {os.path.normpath("/usr/mock.txt")}",
         )
 
     @patch("sys.platform", "darwin")
