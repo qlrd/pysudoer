@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kivy-sudoer"
+name = "pysudoer"
 version = "0.0.1"
 description = "Run a subprocess with administrative privileges, prompting the user with a graphical OS dialog if necessary."
 authors = ["qlrd <qlrddev@gmail.com>"]
@@ -9,7 +9,6 @@ packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.13"
-kivy = "2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.1.1"
