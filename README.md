@@ -1,5 +1,6 @@
 # pysudoer
 
+[![codecov](https://codecov.io/gh/qlrd/pysudoer/graph/badge.svg?token=WFJJQNVA4M)](https://codecov.io/gh/qlrd/pysudoer)
 
 This is a [@o/elecron-sudo](https://www.npmjs.com/package/@o/electron-sudo)'s python port.
 
