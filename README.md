@@ -1,4 +1,5 @@
-# kivy-sudoer
+# pysudoer
+
 
 This is a [@o/elecron-sudo](https://www.npmjs.com/package/@o/electron-sudo)'s python port.
 
@@ -13,4 +14,63 @@ prompting the user with a graphical OS dialog if necessary.
 
 
 If you don't trust binaries bundled in `pip` package you can manually build tools and use them instead.
+
+## Installing
+
+
+Clone the project:
+
+```bash
+git clone https://github.com/qlrd/pysudoer.git
+```
+
+### Setup
+
+Install poetry:
+
+```bash
+pipx install poetry
+```
+
+Enter in `pysudoer` folder:
+
+```bash
+cd pysudoer
+```
+
+Install dependencies:
+
+```bash
+poetry install
+```
+
+### Pre-commit
+
+Before commit some changes, we recommend to follow a three step:
+
+* Text formatting: 
+
+```bash
+poetry run poe format
+```
+
+* Code linting:
+
+```bash
+poetry run poe lint
+```
+
+* Test:
+
+```bash
+poetry run poe test
+```
+
+### Build
+
+To build `.tar.gz` and `.whl` files:
+
+```bash
+poetry build
+```
 
