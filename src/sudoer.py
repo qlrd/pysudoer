@@ -1,5 +1,6 @@
 """sudoer.py"""
 
+import os
 import io
 import sys
 import tempfile
@@ -101,7 +102,11 @@ class Sudoer:
         cmd: typing.List[str], env: typing.Dict[str, str], callback: typing.Callable
     ):
         """Run some child process"""
-        # pylint: disable=consider-using-with
+        
+        # normalize paths in cmd if applicable
+        for i, argument in enumerate(cmd):
+            cmd[i] = os.path.normpath(cmd[i])
+            
         result = subprocess.Popen(
             cmd,
             env=env,

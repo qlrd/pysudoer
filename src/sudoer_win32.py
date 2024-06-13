@@ -64,10 +64,8 @@ class SudoerWin32(Sudoer):
         """Execute a command with elevate.exe"""
         if not self.binary:
             try:
-                tmp_dir = tempfile.gettempdir()
-
                 # Copy applet to temporary directory
-                target = os.path.join(tmp_dir, "elevate.exe")
+                target = os.path.join(self.tmp_dir, "elevate.exe")
                 target = os.path.normpath(target)
 
                 if not os.path.exists(target):
@@ -86,4 +84,4 @@ class SudoerWin32(Sudoer):
         files = self.write_batch(cmd=cmd, env=env)
         enclosed_binary = self.enclose_double_quotes(self.binary)
         command = [enclosed_binary, "-wait", files[0]]
-        SudoerWin32.run_cmd(cmd=command, env=os.environ.copy(), callback=callback)
+        SudoerWin32.run_cmd(cmd=command, env=env, callback=callback)
