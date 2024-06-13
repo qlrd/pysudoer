@@ -84,7 +84,7 @@ class TestSudoerLinux(TestCase):
         mock_copy.assert_called_once()
         mock_popen.assert_called_once_with(
             [
-                "/usr/bin/gksudo",
+                os.path.normpath("/usr/bin/gksudo"),
                 "--preserve-env",
                 "--sudo-mode",
                 "--description=mock_linux",
@@ -114,7 +114,13 @@ class TestSudoerLinux(TestCase):
         mock_exists.assert_has_calls([call("/usr/bin/gksudo"), call("/usr/bin/pkexec")])
         mock_copy.assert_called_once()
         mock_popen.assert_called_once_with(
-            ["/usr/bin/pkexec", "--disable-internal-agent", "echo", "-v", "'mock'"],
+            [
+                os.path.normpath("/usr/bin/pkexec"),
+                "--disable-internal-agent",
+                "echo",
+                "-v",
+                "'mock'",
+            ],
             env={"USER": "mock", "DISPLAY": ":0"},
             stdout=-1,
             stderr=-1,

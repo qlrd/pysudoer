@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 from src.sudoer_unix import SudoerUnix
@@ -18,7 +19,7 @@ class TestSudoerUnix(TestCase):
         sudoer = SudoerUnix(name="mock_linux", icns=None)
         sudoer.reset(env={}, callback=callback)
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
+            [os.path.normpath("/usr/bin/sudo"), "-k"], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "linux")
@@ -37,7 +38,7 @@ class TestSudoerUnix(TestCase):
 
         self.assertEqual(str(exc_info.exception), "failed")
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
+            [os.path.normpath("/usr/bin/sudo"), "-k"], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "darwin")
@@ -53,7 +54,7 @@ class TestSudoerUnix(TestCase):
         sudoer = SudoerUnix(name="mock_darwin", icns=None)
         sudoer.reset(callback=callback, env={})
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
+            [os.path.normpath("/usr/bin/sudo"), "-k"], env={}, stdout=-1, stderr=-1
         )
 
     @patch("sys.platform", "darwin")
@@ -72,5 +73,5 @@ class TestSudoerUnix(TestCase):
 
         self.assertEqual(str(exc_info.exception), "failed")
         mock_popen.assert_called_once_with(
-            ["/usr/bin/sudo", "-k"], env={}, stdout=-1, stderr=-1
+            [os.path.normpath("/usr/bin/sudo"), "-k"], env={}, stdout=-1, stderr=-1
         )
