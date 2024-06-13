@@ -15,8 +15,28 @@ class TestSudoerLinux(TestCase):
     @patch("sys.platform", "linux")
     def test_get_paths(self):
         binaries = SudoerLinux.get_paths()
+
+        dir_name = os.path.dirname(__file__)
+        bin_path = os.path.join(dir_name, "..", "bin")
+        local_bin = os.path.normpath(os.path.join(bin_path, "gksudo"))
         self.assertEqual(binaries[0], "/usr/bin/gksudo")
         self.assertEqual(binaries[1], "/usr/bin/pkexec")
+        self.assertEqual(binaries[2], local_bin)
+
+    @patch("sys.platform", "linux")
+    @patch("src.sudoer_linux.os.path.exists", side_effect=[False, False, False])
+    def test_get_binary_fail(self, mock_exists):
+        with self.assertRaises(RuntimeError) as exc_info:
+            SudoerLinux.get_binary()
+
+        self.assertEqual(str(exc_info.exception), "Any polkit executable found")
+
+        dir_name = os.path.dirname(__file__)
+        bin_path = os.path.join(dir_name, "..", "bin")
+        local_bin = os.path.normpath(os.path.join(bin_path, "gksudo"))
+        mock_exists.assert_has_calls(
+            [call("/usr/bin/gksudo"), call("/usr/bin/pkexec"), call(local_bin)]
+        )
 
     @patch("sys.platform", "linux")
     @patch("src.sudoer_linux.os.path.exists", side_effect=[True])

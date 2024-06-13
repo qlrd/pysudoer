@@ -1,6 +1,5 @@
 """sudoer_unix.py"""
 
-import os
 import typing
 from src.sudoer import Sudoer
 

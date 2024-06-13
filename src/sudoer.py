@@ -102,11 +102,12 @@ class Sudoer:
         cmd: typing.List[str], env: typing.Dict[str, str], callback: typing.Callable
     ):
         """Run some child process"""
-        
+
         # normalize paths in cmd if applicable
-        for i, argument in enumerate(cmd):
-            cmd[i] = os.path.normpath(cmd[i])
-            
+        for i, token in enumerate(cmd):  #
+            cmd[i] = os.path.normpath(token)
+
+        # pylint: disable=consider-using-with
         result = subprocess.Popen(
             cmd,
             env=env,

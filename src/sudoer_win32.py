@@ -4,7 +4,6 @@ import os
 import typing
 import random
 import shutil
-import tempfile
 from src.sudoer import Sudoer
 
 

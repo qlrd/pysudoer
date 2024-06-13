@@ -17,7 +17,7 @@ class SudoerLinux(SudoerUnix):
     """
 
     def __init__(self, name: str):
-        super().__init__(name=name, icns=None)
+        super().__init__(name=name if not name is None else "pysudoer", icns=None)
 
     @staticmethod
     def get_binary() -> str:
