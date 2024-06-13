@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from src.sudoer import Sudoer
+from pysudoer.sudoer import Sudoer
 
 
 class TestSudoer(TestCase):
@@ -23,7 +23,7 @@ class TestSudoer(TestCase):
         self.assertEqual(sudoer.options.name, "mock")
         self.assertEqual(sudoer.platform, "darwin")
 
-    @patch("src.sudoer.io.BytesIO")
+    @patch("pysudoer.sudoer.io.BytesIO")
     def test_hash(self, mock_io):
         io_bytes_mock = MagicMock()
         attrs = {"getbuffer.return_value": {"nbytes": 0}, "getvalue.return_value": ""}
@@ -46,7 +46,7 @@ class TestSudoer(TestCase):
         msg = Sudoer.enclose_double_quotes("mock message")
         self.assertEqual(msg, '"mock message"')
 
-    @patch("src.sudoer.Sudoer.kill")
+    @patch("pysudoer.sudoer.Sudoer.kill")
     def test_kill(self, mock_kill):
         Sudoer.kill(1234)
         mock_kill.assert_called_once_with(1234)

@@ -4,7 +4,7 @@ import os
 import typing
 import random
 import shutil
-from src.sudoer import Sudoer
+from pysudoer.sudoer import Sudoer
 
 
 class SudoerWin32(Sudoer):

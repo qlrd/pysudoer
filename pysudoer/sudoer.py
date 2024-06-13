@@ -8,7 +8,7 @@ import hashlib
 import typing
 import subprocess
 
-from .sudoer_options import SudoerOptions
+from pysudoer.sudoer_options import SudoerOptions
 
 EXEC_OPTIONS = {"env": None}
 

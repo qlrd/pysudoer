@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 from unittest.mock import MagicMock, patch, call
-from src.sudoer_linux import SudoerLinux
+from pysudoer.sudoer_linux import SudoerLinux
 
 
 class TestSudoerLinux(TestCase):
@@ -24,7 +24,7 @@ class TestSudoerLinux(TestCase):
         self.assertEqual(binaries[2], local_bin)
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[False, False, False])
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[False, False, False])
     def test_get_binary_fail(self, mock_exists):
         with self.assertRaises(RuntimeError) as exc_info:
             SudoerLinux.get_binary()
@@ -39,21 +39,21 @@ class TestSudoerLinux(TestCase):
         )
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[True])
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[True])
     def test_get_binary_usr_bin_gksudo(self, mock_exists):
         binary = SudoerLinux.get_binary()
         mock_exists.assert_has_calls([call("/usr/bin/gksudo")])
         self.assertEqual(binary, "/usr/bin/gksudo")
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[False, True])
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[False, True])
     def test_get_binary_usr_bin_pkexec(self, mock_exists):
         binary = SudoerLinux.get_binary()
         mock_exists.assert_has_calls([call("/usr/bin/gksudo"), call("/usr/bin/pkexec")])
         self.assertEqual(binary, "/usr/bin/pkexec")
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[False, False, True])
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[False, False, True])
     def test_get_binary_local_gksudo(self, mock_exists):
         binary = SudoerLinux.get_binary()
 
@@ -67,9 +67,9 @@ class TestSudoerLinux(TestCase):
         self.assertEqual(binary, local_bin)
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[True])
-    @patch("src.sudoer_linux.os.environ.copy", return_value={"USER": "mock"})
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[True])
+    @patch("pysudoer.sudoer_linux.os.environ.copy", return_value={"USER": "mock"})
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_exec_with_usr_bin_gksudo(self, mock_popen, mock_copy, mock_exists):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (b"success", None)}
@@ -98,9 +98,9 @@ class TestSudoerLinux(TestCase):
         )
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer_linux.os.path.exists", side_effect=[False, True])
-    @patch("src.sudoer_linux.os.environ.copy", return_value={"USER": "mock"})
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer_linux.os.path.exists", side_effect=[False, True])
+    @patch("pysudoer.sudoer_linux.os.environ.copy", return_value={"USER": "mock"})
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_exec_with_usr_bin_pkexec(self, mock_popen, mock_copy, mock_exists):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (b"success", None)}

@@ -1,13 +1,13 @@
 import os
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from src.sudoer_unix import SudoerUnix
+from pysudoer.sudoer_unix import SudoerUnix
 
 
 class TestSudoerUnix(TestCase):
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_sudoer_linux_reset(self, mock_popen):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (b"success", None)}
@@ -23,7 +23,7 @@ class TestSudoerUnix(TestCase):
         )
 
     @patch("sys.platform", "linux")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_sudoer_linux_reset_fail(self, mock_popen):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (None, b"failed")}
@@ -42,7 +42,7 @@ class TestSudoerUnix(TestCase):
         )
 
     @patch("sys.platform", "darwin")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_sudoer_darwin_reset(self, mock_popen):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (b"success", None)}
@@ -58,7 +58,7 @@ class TestSudoerUnix(TestCase):
         )
 
     @patch("sys.platform", "darwin")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_sudoer_darwin_reset_fail(self, mock_popen):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (None, b"failed")}

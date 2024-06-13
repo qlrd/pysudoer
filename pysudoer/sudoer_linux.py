@@ -2,7 +2,7 @@
 
 import os
 import typing
-from src.sudoer_unix import SudoerUnix
+from pysudoer.sudoer_unix import SudoerUnix
 
 
 class SudoerLinux(SudoerUnix):

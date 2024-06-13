@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from src.sudoer_darwin import SudoerDarwin
+from pysudoer.sudoer_darwin import SudoerDarwin
 
 
 class TestSudoerDarwin(TestCase):
@@ -63,7 +63,7 @@ class TestSudoerDarwin(TestCase):
         )
 
     @patch("sys.platform", "darwin")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_exec(self, mock_popen):
         process_mock = MagicMock()
         attrs = {"communicate.return_value": (b"success", None)}

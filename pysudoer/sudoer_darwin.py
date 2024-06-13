@@ -2,7 +2,7 @@
 
 import re
 import typing
-from src.sudoer_unix import SudoerUnix
+from pysudoer.sudoer_unix import SudoerUnix
 
 
 class SudoerDarwin(SudoerUnix):

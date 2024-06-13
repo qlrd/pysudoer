@@ -5,7 +5,7 @@ description = "Run a subprocess with administrative privileges, prompting the us
 authors = ["qlrd <qlrddev@gmail.com>"]
 license = "LICENSE"
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "pysudoer"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.13"
@@ -17,18 +17,18 @@ pytest-cov = "^4.1.0"
 poethepoet = "^0.25.1"
 
 [tool.poe.tasks]
-format-src = "black ./src"
+format-src = "black ./pysudoer"
 format-tests = "black ./tests"
 format = ["format-src", "format-tests"]
 lint.sequence = [
-    { cmd = "pylint --rcfile .pylint/src ./src" },
+    { cmd = "pylint --rcfile .pylint/src ./pysudoer" },
     { cmd = "pylint --rcfile .pylint/tests ./tests"}
 ]
 test.sequence = [
-    { cmd = "pytest --cache-clear --cov=src --cov-report html ./tests"}
+    { cmd = "pytest --cache-clear --cov=pysudoer --cov-report html ./tests"}
 ]
 
-coverage= "pytest --cache-clear --cov=src --cov-report xml ./tests"
+coverage= "pytest --cache-clear --cov=pysudoer --cov-report xml ./tests"
 
 [build-system]
 requires = ["poetry-core"]

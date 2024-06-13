@@ -1,7 +1,7 @@
 """sudoer_unix.py"""
 
 import typing
-from src.sudoer import Sudoer
+from pysudoer.sudoer import Sudoer
 
 
 class SudoerUnix(Sudoer):

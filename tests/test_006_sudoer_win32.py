@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 from unittest.mock import MagicMock, patch, call, mock_open
-from src.sudoer_win32 import SudoerWin32
+from pysudoer.sudoer_win32 import SudoerWin32
 
 
 class TestSudoerWin32(TestCase):
@@ -15,15 +15,15 @@ class TestSudoerWin32(TestCase):
     @patch("sys.platform", "win32")
     def test_bundled(self):
         dir_name = os.path.dirname(__file__)
-        bin_path = os.path.join(dir_name, "..", "src", "bin")
+        bin_path = os.path.join(dir_name, "..", "pysudoer", "bin")
         elevate = os.path.normpath(os.path.join(bin_path, "elevate.exe"))
 
         sudoer = SudoerWin32(name="mock_win")
         self.assertEqual(sudoer.bundled, elevate)
 
     @patch("sys.platform", "win32")
-    @patch("src.sudoer.tempfile.mkdtemp", return_value="C:\\TEMP\\mock")
-    @patch("src.sudoer_win32.random.randrange", side_effect=[12345, 6789])
+    @patch("pysudoer.sudoer.tempfile.mkdtemp", return_value="C:\\TEMP\\mock")
+    @patch("pysudoer.sudoer_win32.random.randrange", side_effect=[12345, 6789])
     @patch("builtins.open", new_callable=mock_open())
     def test_write_batch(self, open_mock, mock_randrange, mock_mkdtemp):
         sudoer = SudoerWin32(name="mock_win")
@@ -62,12 +62,12 @@ class TestSudoerWin32(TestCase):
         self.assertEqual(result[1], "C:\\TEMP\\mock\\output-6789")
 
     @patch("sys.platform", "win32")
-    @patch("src.sudoer.tempfile.mkdtemp", return_value="C:\\TEMP\\mock")
-    @patch("src.sudoer_win32.random.randrange", side_effect=[12345, 6789])
+    @patch("pysudoer.sudoer.tempfile.mkdtemp", return_value="C:\\TEMP\\mock")
+    @patch("pysudoer.sudoer_win32.random.randrange", side_effect=[12345, 6789])
     @patch("builtins.open", new_callable=mock_open())
-    @patch("src.sudoer_win32.os.path.exists", side_effect=[False])
-    @patch("src.sudoer_win32.shutil.copyfile")
-    @patch("src.sudoer.subprocess.Popen")
+    @patch("pysudoer.sudoer_win32.os.path.exists", side_effect=[False])
+    @patch("pysudoer.sudoer_win32.shutil.copyfile")
+    @patch("pysudoer.sudoer.subprocess.Popen")
     def test_exec(
         self,
         mock_popen,
@@ -83,7 +83,7 @@ class TestSudoerWin32(TestCase):
         mock_popen.return_value = process_mock
 
         dir_name = os.path.dirname(__file__)
-        bin_path = os.path.join(dir_name, "..", "src", "bin")
+        bin_path = os.path.join(dir_name, "..", "pysudoer", "bin")
         elevate_path = os.path.normpath(os.path.join(bin_path, "elevate.exe"))
 
         callback = MagicMock()

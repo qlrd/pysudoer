@@ -1,5 +1,5 @@
 from unittest import TestCase
-from src.sudoer_options import SudoerOptions
+from pysudoer.sudoer_options import SudoerOptions
 
 
 class TestSudoerOptions(TestCase):
