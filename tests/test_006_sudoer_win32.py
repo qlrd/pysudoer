@@ -5,7 +5,6 @@ from pysudoer.sudoer_win32 import SudoerWin32
 
 
 class TestSudoerWin32(TestCase):
-
     @patch("sys.platform", "win32")
     def test_init(self):
         sudoer = SudoerWin32(name="mock_win")
@@ -61,6 +60,7 @@ class TestSudoerWin32(TestCase):
         self.assertEqual(result[0], "C:\\TEMP\\mock\\batch-12345.bat")
         self.assertEqual(result[1], "C:\\TEMP\\mock\\output-6789")
 
+    # pylint: disable=too-many-positional-arguments
     @patch("sys.platform", "win32")
     @patch("pysudoer.sudoer.tempfile.mkdtemp", return_value="C:\\TEMP\\mock")
     @patch("pysudoer.sudoer_win32.random.randrange", side_effect=[12345, 6789])

@@ -1,38 +1,39 @@
 [tool.poetry]
 name = "pysudoer"
-version = "0.0.1"
+version = "0.0.2"
 description = "Run a subprocess with administrative privileges, prompting the user with a graphical OS dialog if necessary."
 authors = ["qlrd <qlrddev@gmail.com>"]
 license = "LICENSE"
 readme = "README.md"
-packages = [{include = "pysudoer"}]
+packages = [{ include = "pysudoer" }]
 
+# BREAKING CHANGE: Minimum supported Python version increased from 3.9 to 3.10.
+# Users on Python 3.9 will no longer be able to use this version of the library.
 [tool.poetry.dependencies]
-python = ">=3.9, <=3.13"
+python = ">=3.10, <=3.14"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.1.1"
-pylint = "^3.0.3"
-pytest-cov = "^4.1.0"
-poethepoet = "^0.25.1"
+black = "^25.11.0"
+pylint = "^4.0.3"
+pytest-cov = "^7.0.0"
+poethepoet = "^0.37.0"
 
 [tool.poe.tasks]
 format-src = "black ./pysudoer"
 format-tests = "black ./tests"
 format = ["format-src", "format-tests"]
 lint.sequence = [
-    { cmd = "pylint --rcfile .pylint/src ./pysudoer" },
-    { cmd = "pylint --rcfile .pylint/tests ./tests"}
+  { cmd = "pylint --rcfile .pylint/src ./pysudoer" },
+  { cmd = "pylint --rcfile .pylint/tests ./tests" },
 ]
 test.sequence = [
-    { cmd = "pytest --cache-clear --cov=pysudoer --cov-report html ./tests"}
+  { cmd = "pytest --cache-clear --cov=pysudoer --cov-report html ./tests --cov-context=test --cov-report term-missing" },
+]
+coverage.sequence = [
+  { cmd = "pytest --cache-clear --cov=pysudoer --cov-report xml ./tests --cov-context=test --cov-report term-missing" },
 ]
 
-coverage= "pytest --cache-clear --cov=pysudoer --cov-report xml ./tests"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-
-
