@@ -17,7 +17,8 @@ class SudoerLinux(SudoerUnix):
     """
 
     def __init__(self, name: str):
-        super().__init__(name=name if not name is None else "pysudoer", icns=None)
+        _name = name if len(name.strip()) != 0 else "pysudoer-linux"
+        super().__init__(name=_name, icns=None)
 
     @staticmethod
     def get_binary() -> str:
@@ -51,7 +52,7 @@ class SudoerLinux(SudoerUnix):
         if not env:
             env = os.environ.copy()
 
-        if not "DISPLAY" in env.keys():
+        if "DISPLAY" not in env.keys():
             env["DISPLAY"] = ":0"
 
         binary = SudoerLinux.get_binary()

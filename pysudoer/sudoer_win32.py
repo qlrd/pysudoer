@@ -20,7 +20,8 @@ class SudoerWin32(Sudoer):
     """
 
     def __init__(self, name: str):
-        super().__init__(name=name, icns=None)
+        _name = name if len(name.strip()) != 0 else "pysudoer-win32"
+        super().__init__(name=_name, icns=None)
         self.binary = None
 
     @property
@@ -30,13 +31,13 @@ class SudoerWin32(Sudoer):
         bin_path = os.path.join(dir_name, "bin")
         return os.path.normpath(os.path.join(bin_path, "elevate.exe"))
 
-    def write_batch(self, cmd: typing.List[str], env: typing.Dict[str, str]):
+    def write_batch(self, cmd: list[str], env: dict[str, str]):
         """Write a batch file"""
         tmp_batch_file = os.path.normpath(
-            f"{self.tmp_dir}\\batch-{random.randrange(10000)}.bat"
+            f"{self.temp_dir}\\batch-{random.randrange(10000)}.bat"
         )
         tmp_output_file = os.path.normpath(
-            f"{self.tmp_dir}\\output-{random.randrange(10000)}"
+            f"{self.temp_dir}\\output-{random.randrange(10000)}"
         )
 
         batch = ["setlocal enabledelayedexpansion"]
@@ -57,14 +58,12 @@ class SudoerWin32(Sudoer):
 
         return (tmp_batch_file, tmp_output_file)
 
-    def exec(
-        self, cmd: typing.List[str], env=typing.Dict[str, str], callback=typing.Callable
-    ):
+    def exec(self, cmd: list[str], env=dict[str, str], callback=typing.Callable):
         """Execute a command with elevate.exe"""
         if not self.binary:
             try:
                 # Copy applet to temporary directory
-                target = os.path.join(self.tmp_dir, "elevate.exe")
+                target = os.path.join(self.temp_dir, "elevate.exe")
                 target = os.path.normpath(target)
 
                 if not os.path.exists(target):

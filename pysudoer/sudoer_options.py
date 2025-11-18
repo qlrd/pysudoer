@@ -10,9 +10,9 @@ class SudoerOptions:
     * icns: used for SudoerDarwin (macOS)
     """
 
-    def __init__(self, name: str, icns: str):
-        self.name = name
-        self.icns = icns
+    def __init__(self, name: str, icns: str | None):
+        self._name = name
+        self._icns = icns
 
     @property
     def name(self) -> str:
@@ -22,17 +22,14 @@ class SudoerOptions:
     @name.setter
     def name(self, value: str):
         """Setter for name"""
-        if not value is None:
-            self._name = value
-        else:
-            raise ValueError("Name cannot be None")
+        self._name = value
 
     @property
-    def icns(self) -> str:
+    def icns(self) -> str | None:
         """Getter for icns"""
         return self._icns
 
     @icns.setter
-    def icns(self, value: str = ""):
+    def icns(self, value: str | None = ""):
         """Setter for icns"""
         self._icns = value
