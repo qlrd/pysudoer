@@ -29,10 +29,11 @@ class Sudoer:
     Refactored from https://www.npmjs.com/package/@o/electron-sudo
     """
 
-    def __init__(self, name: str, icns: str = None):
-        self.options = SudoerOptions(name=name, icns=icns)
-        self.platform = sys.platform
-        self.tmp_dir = tempfile.mkdtemp()
+    def __init__(self, name: str = "", icns: str | None = None):
+        _name = name if len(name.strip()) != 0 else "pysudoer"
+        self._options = SudoerOptions(name=_name, icns=icns)
+        self._platform = sys.platform
+        self._temp_dir = tempfile.mkdtemp()
 
     @property
     def options(self) -> SudoerOptions:
@@ -40,29 +41,19 @@ class Sudoer:
         return self._options
 
     @options.setter
-    def options(self, value: str):
+    def options(self, value: SudoerOptions):
         """Setter for options"""
         self._options = value
 
     @property
     def platform(self) -> str:
-        """Getter for platform"""
+        """Getter for platform. Read only"""
         return self._platform
-
-    @platform.setter
-    def platform(self, value: str):
-        """Setter for platform"""
-        self._platform = value
 
     @property
     def temp_dir(self) -> str:
-        """Getter for temp_dir"""
+        """Getter for temp_dir. Read only"""
         return self._temp_dir
-
-    @temp_dir.setter
-    def temp_dir(self, value: str):
-        """Setter for temp_dir"""
-        self._temp_dir = value
 
     def hash(self, buffer: io.BytesIO = io.BytesIO(b"")):
         """Create a hash for Sudoer object"""
@@ -74,9 +65,6 @@ class Sudoer:
     @staticmethod
     def join_env(options: typing.Dict[str, str]):
         """Return an array of `key=value` strings for a given dictionary"""
-        if options is None:
-            raise ValueError("Env options cannot be None")
-
         return [f"{key}={val}" for key, val in options.items()]
 
     @staticmethod
@@ -90,17 +78,7 @@ class Sudoer:
         return message.replace(message, f'"{message}"')
 
     @staticmethod
-    def kill(pid: int):
-        """kill a process"""
-        if not pid:
-            pass
-        else:
-            pass
-
-    @staticmethod
-    def run_cmd(
-        cmd: typing.List[str], env: typing.Dict[str, str], callback: typing.Callable
-    ):
+    def run_cmd(cmd: list[str], env: dict[str, str], callback: typing.Callable):
         """Run some child process"""
 
         # normalize paths in cmd if applicable

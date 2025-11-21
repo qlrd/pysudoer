@@ -17,11 +17,8 @@ class SudoerDarwin(SudoerUnix):
     """
 
     def __init__(self, name: str, icns: str):
-        super().__init__(name=name if not name is None else "kivy", icns=icns)
-        if icns is None:
-            raise ValueError("icns must be a string if provided")
-        if len(icns.strip()) == 0:
-            raise ValueError("icns must be a non-empty string if provided")
+        _name = name if len(name.strip()) != 0 else "pysudoer-darwin"
+        super().__init__(name=_name, icns=icns)
 
     @staticmethod
     def is_valid_name(name: str) -> bool:
@@ -29,22 +26,22 @@ class SudoerDarwin(SudoerUnix):
         check if a given string is valid by non-empty alphanumeric + space
         and less than 70 characters
         """
-        return (
-            re.findall(r"^[a-z0-9\s]+$", name)
-            and len(name.strip()) > 0
-            and len(name) < 70
-        )
+        foundall = re.findall(r"^[a-z0-9\s]+$", name)
+        is_gt_zero = len(name.strip()) > 0
+        is_lt_zero = len(name) < 70
+        return any(foundall) and is_gt_zero and is_lt_zero
 
     def get_command(self, cmd: str) -> typing.List[str]:
         """Run AppleScript from the Command Line in Mac OS X with administrator privileges"""
         return [
-            "osascript -e",
-            f'"do shell script \\"{cmd}\\"',
+            "osascript",
+            "-e",
+            f'"do shell script \\"{cmd}\\""',
             f'with prompt \\"{self.options.name}\\"',
             "with administrator privileges",
         ]
 
-    def exec(self, cmd: str, env: typing.Callable, callback: typing.Callable):
+    def exec(self, cmd: str, env: dict[str, str], callback: typing.Callable):
         """Run a command for AppleScript"""
         cmd_escaped = re.sub(r"\"", r'\\\\\\"', cmd)
         to_exec = self.get_command(cmd_escaped)

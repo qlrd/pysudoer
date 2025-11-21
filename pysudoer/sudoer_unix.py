@@ -17,9 +17,10 @@ class SudoerUnix(Sudoer):
     Refactored from https://www.npmjs.com/package/@o/electron-sudo
     """
 
-    def __init__(self, name: str, icns: str):
-        super().__init__(name=name, icns=icns)
+    def __init__(self, name: str, icns: str | None):
+        _name = name if len(name.strip()) != 0 else "pysudoer-unix"
+        super().__init__(name=_name, icns=icns)
 
-    def reset(self, env: typing.Dict[str, str], callback: typing.Callable):
+    def reset(self, env: dict[str, str], callback: typing.Callable):
         """Invalidate the timestamp file (sudo -k)"""
         SudoerUnix.run_cmd(["/usr/bin/sudo", "-k"], env=env, callback=callback)
